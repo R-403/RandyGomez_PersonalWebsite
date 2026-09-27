@@ -1,0 +1,51 @@
+html, body, #root { height: 100%; margin: 0; }
+body { overflow: hidden; }
+
+/* A very faint noise layer over the whole app, so flat CSS gradients don't read
+   as sterile vector art. Generated inline — no image asset to ship. */
+.p4-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The diagonal wipe that covers the screen between routes, instead of an abrupt cut. */
+.p4-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background: linear-gradient(100deg, #14060f 46%, #f2c500 48%, #f2c500 52%, #14060f 54%);
+  transform: translateX(-115%);
+}
+.p4-wipe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.p4-wipe--covering,
+.p4-wipe--revealing {
+  transition: transform 260ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.p4-wipe--covering {
+  transform: translateX(0%);
+}
+.p4-wipe--revealing {
+  transform: translateX(115%);
+}
+.p4-wipe--idle {
+  transform: translateX(-115%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p4-wipe {
+    transition: none !important;
+  }
+}

@@ -1,0 +1,274 @@
+/* P4Menu: a Persona 4 style menu for the portfolio.
+   Every selector and custom property is prefixed p4- so nothing here leaks into the rest of your app.
+
+   Sizes are measured against a 16:9 "stage" the size of the artwork:
+   1cqw = 1% of the stage's width (a container query unit). */
+
+   .p4 {
+    --p4-art: none; /* set inline by the component */
+    --p4-font: 'Gelasio', Georgia, 'Times New Roman', serif; /* body copy */
+    --p4-font-display: 'Oswald', 'Arial Narrow', Arial, sans-serif; /* menu labels, titles, HUD text */
+    --p4-base: 0.78em; /* Oswald Bold's baseline offset at line-height 1. Must match BASE in P4Menu.jsx */
+    --p4-page: #e9b90a;
+    --p4-veil: rgba(255, 238, 130, 0.1);
+    --p4-ink: #14060f;
+    --p4-toast-bg: rgba(26, 8, 36, 0.88);
+    --p4-toast-ink: #fff2a8;
+    --p4-zoom: 1; /* phones held upright zoom in on the menu (see the media query below) */
+    --p4-fx: 50%;
+  
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    container-type: size;
+    background: var(--p4-page);
+    font-family: var(--p4-font);
+    -webkit-font-smoothing: antialiased;
+  }
+  .p4--full {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .p4 {
+      --p4-page: #1d1405;
+      --p4-veil: rgba(10, 5, 0, 0.5);
+      --p4-toast-bg: rgba(255, 244, 170, 0.92);
+      --p4-toast-ink: #1a0a12;
+    }
+  }
+  @media (max-aspect-ratio: 1/1) {
+    .p4 {
+      --p4-zoom: 1.6;
+      --p4-fx: 56%;
+    }
+  }
+  
+  .p4-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Screens that aren't 16:9: the same art, blurred, fills the gaps instead of flat bars. */
+  .p4::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    inset: -48px;
+    background: var(--p4-art) center / cover no-repeat;
+    filter: blur(26px) saturate(1.05);
+  }
+  .p4::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: var(--p4-veil);
+  }
+  
+  /* The 16:9 stage everything else is measured against. */
+  .p4-stage {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--p4-zoom) * min(100cqw, 100cqh * 16 / 9));
+    aspect-ratio: 16 / 9;
+    transform: translate(calc(-1 * var(--p4-fx)), -50%);
+    container-type: inline-size;
+    background: var(--p4-art) center / 100% 100% no-repeat;
+    box-shadow: 0 0 40px rgba(70, 35, 0, 0.28);
+  }
+  .p4-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Each label: its baseline-left corner is pinned at (--p4-x, --p4-y) and it rotates about that point. */
+  .p4-mi {
+    position: absolute;
+    left: calc(var(--p4-x) * 1cqw);
+    top: calc(var(--p4-y) * 1cqw - var(--p4-base));
+    font-size: calc(var(--p4-fs) * 1cqw);
+    line-height: 1;
+    transform-origin: 0 var(--p4-base);
+    transform: rotate(calc(var(--p4-r) * -1deg)) scale(var(--p4-s, 1));
+    transition: transform 0.26s cubic-bezier(0.2, 1.5, 0.35, 1);
+  }
+  .p4-mi.is-selected {
+    --p4-s: var(--p4-ss, 1.3);
+    z-index: 2;
+  }
+  
+  /* .p4 .p4-a is a little more specific than the usual global a/button styles (Vite's template
+     colours links and outlines focused buttons), so those can't leak in. */
+  .p4 .p4-a,
+  .p4 .p4-a:hover,
+  .p4 .p4-a:focus,
+  .p4 .p4-a:focus-visible {
+    color: var(--p4-ink);
+    outline: none;
+    box-shadow: none;
+  }
+  .p4 .p4-a {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    appearance: none;
+    font-family: var(--p4-font-display);
+    font-weight: 700;
+    font-size: 1em;
+    line-height: 1;
+    font-synthesis: none;
+    text-align: left;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.015em;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    animation: p4-in 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+    animation-delay: calc(var(--p4-i) * 70ms + 120ms);
+  }
+  .p4-t {
+    position: relative;
+    display: block;
+    text-shadow: 0.022em 0 0 rgba(255, 45, 85, 0.5), -0.022em 0 0 rgba(0, 190, 120, 0.4);
+  }
+  
+  /* Selected: a white slanted card, with the lettering gone blue and magenta inside it,
+     like the highlighted item in the game. */
+  .p4-card,
+  .p4-wedge {
+    position: absolute;
+    left: -1em;
+    top: -1.5em;
+    height: 4.5em;
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: 1em calc(1.5em + var(--p4-base));
+    transform: rotate(var(--p4-cr));
+  }
+  .p4-card {
+    width: calc(100% + 2em);
+    background: #fff;
+    clip-path: var(--p4-card);
+    box-shadow: 0.15em 0.15em 0 rgba(26, 45, 255, 0.32);
+  }
+  .p4-wedge {
+    width: 3em;
+    background: linear-gradient(115deg, #2a3cff 0%, #00b4ff 100%);
+    clip-path: var(--p4-wedge);
+  }
+  .p4-wedge::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: var(--p4-wedge);
+    background: #ff2ed1;
+    opacity: 0.4;
+    mix-blend-mode: screen;
+    transform: translateX(0.05em);
+  }
+  .is-selected .p4-card,
+  .is-selected .p4-wedge {
+    opacity: 1;
+    animation: p4-card-in 0.26s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  }
+  .p4-g {
+    position: absolute;
+    left: 1em;
+    top: 1.5em;
+    display: block;
+    white-space: nowrap;
+    color: transparent;
+    background: linear-gradient(105deg, #1a2dff 0%, #1a2dff 26%, #ff2ed1 50%, #1a2dff 76%, #00b4ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    transform-origin: 0 var(--p4-base);
+    transform: rotate(calc(var(--p4-cr) * -1));
+    filter: drop-shadow(0.05em 0 0 rgba(255, 30, 120, 0.55)) drop-shadow(-0.035em 0 0 rgba(0, 220, 255, 0.55));
+  }
+  .is-selected .p4-g {
+    animation: p4-glitch 0.3s steps(2, end) 1;
+  }
+  
+  @keyframes p4-in {
+    from {
+      opacity: 0;
+      translate: -1.2em 0.3em;
+    }
+  }
+  @keyframes p4-card-in {
+    from {
+      opacity: 0;
+      translate: -0.5em 0.15em;
+    }
+  }
+  @keyframes p4-glitch {
+    0% {
+      translate: 0.04em -0.01em;
+    }
+    33% {
+      translate: -0.05em 0.015em;
+    }
+    66% {
+      translate: 0.03em 0;
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+  
+  /* The "coming soon" pill. */
+  .p4-toast {
+    position: absolute;
+    right: 2.6cqw;
+    bottom: 2.6cqw;
+    max-width: 60cqw;
+    padding: 0.7em 1.2em;
+    border-radius: 999px;
+    background: var(--p4-toast-bg);
+    color: var(--p4-toast-ink);
+    font-family: var(--p4-font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: max(13px, 1.25cqw);
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    translate: 0 0.6em;
+    transition: opacity 0.2s, translate 0.2s;
+    pointer-events: none;
+  }
+  .p4-toast.on {
+    opacity: 1;
+    translate: 0 0;
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .p4::before,
+    .p4::after,
+    .p4 *,
+    .p4 *::before,
+    .p4 *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }

@@ -1,0 +1,50 @@
+/* Sits above every screen (menu or sub-page), so it isn't tied to .p4's stacking context. */
+.p4-sfx {
+  position: fixed;
+  z-index: 40;
+  top: max(14px, env(safe-area-inset-top, 0px));
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0;
+  padding: 0.45em 0.9em;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(20, 6, 15, 0.55);
+  color: rgba(255, 244, 170, 0.75);
+  font-family: 'Oswald', 'Arial Narrow', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(3px);
+  transition: color 0.15s, background 0.15s;
+}
+.p4-sfx:hover {
+  color: #fff2a8;
+  background: rgba(20, 6, 15, 0.72);
+}
+.p4-sfx:focus-visible {
+  outline: 2px solid #fff2a8;
+  outline-offset: 2px;
+}
+.p4-sfx__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.p4-sfx.is-on .p4-sfx__dot {
+  background: #0dd9ff;
+  opacity: 1;
+  box-shadow: 0 0 6px #0dd9ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p4-sfx {
+    transition: none;
+  }
+}

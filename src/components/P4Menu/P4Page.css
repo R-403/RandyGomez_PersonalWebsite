@@ -1,0 +1,370 @@
+/* Sub-pages (About Me, Side Projects, ...).
+   They reuse the .p4 frame and stage from P4Menu.css, so the artwork never shifts between the menu
+   and a page. Everything is prefixed p4- so nothing leaks into the rest of your app. */
+
+   .p4-panel {
+    --p4-cream: #fff4cf;
+    --p4-yellow: #ffe600;
+  
+    position: absolute;
+    z-index: 2;
+    top: 5%;
+    bottom: 5%;
+    right: 3.2%;
+    display: flex;
+    width: min(56%, 62rem);
+    font-size: clamp(0.95rem, 0.55vw + 0.7rem, 1.2rem);
+    color: var(--p4-cream);
+    outline: none;
+    filter: drop-shadow(0 0.5em 1.2em rgba(40, 10, 0, 0.45));
+    animation: p4-panel-in 0.5s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  }
+  @keyframes p4-panel-in {
+    from {
+      opacity: 0;
+      translate: 4em 0;
+    }
+  }
+  
+  /* The dark slab, with its left edge leaning like the boards in the game's menu. */
+  .p4-panel__shape {
+    --lean: 3.4em;
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.4em 1.5em 1em calc(var(--lean) + 1.3em);
+    line-height: 1.55;
+    background: linear-gradient(165deg, rgba(34, 12, 48, 0.97), rgba(16, 5, 24, 0.97));
+    clip-path: polygon(var(--lean) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  /* the yellow stripe down the slanted edge */
+  .p4-panel__shape::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--p4-yellow);
+    clip-path: polygon(var(--lean) 0, calc(var(--lean) + 0.45em) 0, 0.45em 100%, 0 100%);
+  }
+  
+  /* Title: a white slanted card with blue/magenta lettering, like the selected item on the menu. */
+  .p4-titlebar {
+    position: relative;
+    align-self: flex-start;
+    margin: 0 0 0.8em -0.2em;
+    transform: rotate(-2deg) skewX(-6deg);
+    transform-origin: left bottom;
+  }
+  .p4-titlebar::after {
+    content: '';
+    position: absolute;
+    left: -0.5em;
+    bottom: -0.3em;
+    width: 0.9em;
+    height: 0.55em;
+    background: #2a3cff;
+    clip-path: polygon(0 0, 100% 45%, 35% 100%);
+  }
+  .p4 .p4-title {
+    margin: 0;
+    padding: 0.1em 0.9em 0.14em 0.5em;
+    font-family: var(--p4-font-display);
+    font-weight: 700;
+    font-size: 2.5em;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    background: #fff;
+    clip-path: polygon(0 0, 100% 0, 94% 100%, 0 100%);
+  }
+  .p4-title span {
+    display: inline-block;
+    transform: skewX(6deg); /* undo the titlebar's skew so the letterforms stay upright */
+    color: transparent;
+    background: linear-gradient(105deg, #1a2dff 0%, #1a2dff 26%, #ff2ed1 50%, #1a2dff 76%, #00b4ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0.04em 0 0 rgba(255, 30, 120, 0.5)) drop-shadow(-0.03em 0 0 rgba(0, 220, 255, 0.5));
+  }
+  
+  .p4-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0.2em 1em 1em 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--p4-yellow) transparent;
+  }
+  /* while there is more below the fold, fade the bottom edge (P4Page.jsx toggles .has-more) */
+  .p4-scroll.has-more {
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 2.6em), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 2.6em), transparent);
+  }
+  
+  /* Text */
+  .p4-lead {
+    margin: 0 0 1.1em;
+    font-size: 1.12em;
+    line-height: 1.5;
+    color: #fff8de;
+  }
+  .p4-facts {
+    display: grid;
+    gap: 0.7em;
+    margin: 1.3em 0 1.2em;
+  }
+  .p4-facts > div {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.9em 1em;
+    align-items: center;
+  }
+  .p4-facts dt {
+    display: inline-block;
+    padding: 0.16em 0.7em 0.2em 0.55em;
+    font-family: var(--p4-font-display);
+    font-weight: 700;
+    font-size: 0.72em;
+    line-height: 1.3;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #14060f;
+    background: var(--p4-yellow);
+    clip-path: polygon(0.4em 0, 100% 0, calc(100% - 0.4em) 100%, 0 100%);
+  }
+  /* Rotate through the site's existing accent trio (tinted) instead of one flat color for every row. */
+  .p4-facts > div:nth-child(4n+2) dt { background: #8fdcff; }
+  .p4-facts > div:nth-child(4n+3) dt { background: #ffb3ec; }
+  .p4-facts > div:nth-child(4n+4) dt { background: #b9c2ff; }
+  .p4-sub {
+    margin: 1.3em 0 0.55em;
+    font-weight: 700;
+    font-size: 0.85em;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--p4-yellow);
+    font-family: var(--p4-font-display);
+  }
+  .p4-facts dd {
+    margin: 0;
+    line-height: 1.45;
+  }
+  
+  /* Parallelogram chips */
+  .p4-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em 0.45em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .p4-chips li {
+    padding: 0.22em 1em 0.22em 0.85em;
+    font-family: var(--p4-font-display);
+    font-weight: 700;
+    font-size: 0.78em;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+    color: #14060f;
+    background: var(--p4-yellow);
+    clip-path: polygon(0.5em 0, 100% 0, calc(100% - 0.5em) 100%, 0 100%);
+  }
+  /* A second tone breaks up the row instead of one flat color repeated a dozen times. */
+  .p4-chips:not(.p4-chips--light) li:nth-child(even) {
+    background: #8fdcff;
+  }
+  .p4-chips--light li {
+    background: #fff8de;
+  }
+  
+  /* Links, styled like chips that light up */
+  .p4-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em 0.6em;
+    margin: 0.9em 0 0;
+  }
+  .p4-panel .p4-links a {
+    padding: 0.3em 1em 0.3em 0.85em;
+    font-family: var(--p4-font-display);
+    font-weight: 700;
+    font-size: 0.85em;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+    color: var(--p4-cream);
+    text-decoration: none;
+    box-shadow: inset 0 0 0 0.12em rgba(255, 230, 0, 0.75);
+    clip-path: polygon(0.5em 0, 100% 0, calc(100% - 0.5em) 100%, 0 100%);
+  }
+  .p4-panel .p4-links a:hover,
+  .p4-panel .p4-links a:focus-visible {
+    color: #14060f;
+    background: #fff;
+    box-shadow: none;
+  }
+  .p4-panel a:focus-visible,
+  .p4-panel button:focus-visible {
+    outline: 0.18em solid #fff;
+    outline-offset: 0.2em;
+  }
+  
+  /* Back button */
+  .p4-foot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.8em;
+    padding-top: 0.8em;
+  }
+  .p4 .p4-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7em;
+    margin: 0;
+    padding: 0.5em 1.3em 0.5em 1.1em;
+    border: 0;
+    border-radius: 0;
+    font-family: var(--p4-font-display);
+    font-weight: 700;
+    font-size: 0.9em;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: #14060f;
+    background: var(--p4-yellow);
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.15s ease;
+    clip-path: polygon(0.6em 0, 100% 0, calc(100% - 0.6em) 100%, 0 100%);
+  }
+  .p4 .p4-back:hover {
+    background: #fff;
+  }
+  .p4 .p4-back:active {
+    transform: scale(0.96);
+  }
+  .p4-back kbd {
+    padding: 0.12em 0.45em;
+    font-family: var(--p4-font-display);
+    text-transform: none;
+    font-size: 0.8em;
+    border-radius: 0.3em;
+    box-shadow: inset 0 0 0 0.1em rgba(20, 6, 15, 0.55);
+  }
+  
+  /* Resume: the real PDF, embedded */
+  .p4-resume {
+    margin-top: 0.9em;
+    height: min(75vh, 900px);
+    background: #fff8de;
+    box-shadow: inset 0 0 0 0.14em rgba(255, 230, 0, 0.6);
+  }
+  .p4-resume__frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Side Projects */
+  .p4-projects {
+    display: grid;
+    gap: 1em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .p4-proj {
+    padding: 0.9em 1.2em 1.1em 1.3em;
+    border-left: 0.35em solid var(--p4-yellow);
+    background: rgba(255, 255, 255, 0.06);
+    transition: background 0.15s;
+  }
+  .p4-proj:hover,
+  .p4-proj:focus-within {
+    background: rgba(255, 255, 255, 0.11);
+  }
+  .p4-proj__name {
+    display: inline-block;
+    margin: 0 0 0.15em -0.3em;
+    padding: 0.05em 0.9em 0.08em 0.3em;
+    font-family: var(--p4-font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    font-size: 1.4em;
+    line-height: 1.15;
+    clip-path: polygon(0 0, 100% 0, 94% 100%, 0 100%);
+  }
+  .p4-proj__name span {
+    display: inline-block;
+    color: #fff8de;
+  }
+  .p4-proj:hover .p4-proj__name,
+  .p4-proj:focus-within .p4-proj__name {
+    background: #fff;
+  }
+  .p4-proj:hover .p4-proj__name span,
+  .p4-proj:focus-within .p4-proj__name span {
+    color: transparent;
+    background: linear-gradient(105deg, #1a2dff 0%, #1a2dff 26%, #ff2ed1 50%, #1a2dff 76%, #00b4ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+  .p4-proj__kicker {
+    margin: 0 0 0.5em;
+    font-family: var(--p4-font-display);
+    font-size: 0.82em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--p4-yellow);
+  }
+  .p4-proj__blurb {
+    margin: 0 0 0.8em;
+  }
+  .p4-proj--locked {
+    opacity: 0.55;
+    border-left-color: rgba(255, 230, 0, 0.4);
+  }
+  .p4-proj--locked .p4-proj__name span {
+    letter-spacing: 0.2em;
+  }
+  .p4-proj--locked:hover .p4-proj__name {
+    background: transparent;
+  }
+  .p4-proj--locked:hover .p4-proj__name span {
+    color: #fff8de;
+    background: none;
+  }
+  
+  /* Narrow screens */
+  @media (max-width: 34rem) {
+    .p4-facts > div {
+      grid-template-columns: 1fr;
+      gap: 0.15em;
+    }
+  }
+  /* Phones held upright: the art is a strip along the top and the panel is a sheet under it. */
+  @media (max-aspect-ratio: 1/1) {
+    .p4.p4--page {
+      --p4-zoom: 1.7;
+      --p4-fx: 34%;
+    }
+    .p4.p4--page .p4-stage {
+      top: 0;
+      transform: translate(calc(-1 * var(--p4-fx)), 0);
+    }
+    .p4-panel {
+      top: 30%;
+      bottom: 2.5%;
+      left: 3%;
+      right: 3%;
+      width: auto;
+    }
+    .p4-panel__shape {
+      --lean: 1.8em;
+      padding: 1.2em 1em 0.9em calc(var(--lean) + 0.9em);
+    }
+  }
