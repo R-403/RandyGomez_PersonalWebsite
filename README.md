@@ -13,8 +13,6 @@ npm run preview  # preview the production build
 
 ## Where to edit things
 
-You shouldn't need to touch the component code to update the content:
-
 - **Menu items** (labels, links, position on the screen) — `src/components/P4Menu/items.js`
 - **About Me page** (facts, strengths, tech, tools, contact links) — `src/components/P4Menu/AboutMe.jsx`
 - **Side Projects page** (project cards) — `src/components/P4Menu/projects.js`
