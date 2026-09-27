@@ -24,8 +24,7 @@ npm run preview  # preview the production build
 
 ### Dropping in real game-accurate assets
 
-The font is still a stand-in (`Oswald`, picked to evoke the look) and there's no background video or
-music yet. If you own a legitimate copy of the game and want to get closer to it:
+The font is still a stand-in (`Oswald`, picked to evoke the look)
 
 - **Font** — swap `Oswald` for a font file of your own in `src/components/P4Menu/P4Menu.css`
   (`--p4-font-display`) and `src/main.jsx`.
