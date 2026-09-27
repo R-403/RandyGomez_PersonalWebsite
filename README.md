@@ -22,17 +22,6 @@ npm run preview  # preview the production build
   of any screen. To swap a sound, just replace the matching `.wav` file — the filenames are what `sfx.js`
   imports.
 
-### Dropping in real game-accurate assets
-
-The font is still a stand-in (`Oswald`, picked to evoke the look)
-
-- **Font** — swap `Oswald` for a font file of your own in `src/components/P4Menu/P4Menu.css`
-  (`--p4-font-display`) and `src/main.jsx`.
-- **Background video loop** — the art currently renders as a static image (`.p4-stage` in
-  `P4Menu.css`); a `<video>` could replace it the same way `main1.mp4` is used as a background in other
-  fan projects.
-- **Background music** — add an audio file under `public/audio/` and an `<audio>` element the same way
-  the SFX toggle works.
 
 ## Structure
 
