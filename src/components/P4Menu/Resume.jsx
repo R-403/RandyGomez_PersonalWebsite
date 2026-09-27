@@ -1,7 +1,7 @@
 import P4Page from './P4Page';
 
 // The actual resume file lives in /public, so it's served as-is at this path.
-const RESUME_PDF = '/resume.pdf';
+const RESUME_PDF = `${import.meta.env.BASE_URL}resume.pdf`;
 
 export default function Resume({ onBack }) {
   return (
