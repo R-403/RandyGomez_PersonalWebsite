@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+
 import { useEffect, useState } from 'react';
 import P4Menu from './components/P4Menu/P4Menu';
 import AboutMe from './components/P4Menu/AboutMe';
@@ -6,8 +7,6 @@ import SideProjects from './components/P4Menu/SideProjects';
 import Resume from './components/P4Menu/Resume';
 import SfxToggle from './components/P4Menu/SfxToggle';
 
-// How long each half of the route-wipe transition takes, in ms. Must match
-// the transition duration on .p4-wipe--covering / .p4-wipe--revealing in index.css.
 const WIPE_MS = 260;
 
 function Home() {
@@ -19,12 +18,6 @@ function Page({ component: Component }) {
   const navigate = useNavigate();
   return <Component onBack={() => navigate('/')} onNavigate={navigate} />;
 }
-
-/**
- * Swaps routes behind a brief diagonal wipe instead of an abrupt cut: cover the
- * screen, swap the page underneath, then reveal it. No animation library —
- * just a delayed route swap plus a CSS transform (see .p4-wipe in index.css).
- */
 function AnimatedRoutes() {
   const location = useLocation();
   const [shown, setShown] = useState(location);
@@ -61,10 +54,10 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="p4-grain" aria-hidden="true" />
       <SfxToggle />
       <AnimatedRoutes />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
