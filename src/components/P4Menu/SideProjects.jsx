@@ -3,7 +3,7 @@ import { PROJECTS } from './projects.js';
 
 export default function SideProjects({ onBack }) {
   return (
-    <P4Page title="Side Projects" onBack={onBack}>
+    <P4Page title="Projects" onBack={onBack}>
       <ul className="p4-projects">
         {PROJECTS.map((p) => (
           <li key={p.name} className={`p4-proj${p.locked ? ' p4-proj--locked' : ''}`}>
