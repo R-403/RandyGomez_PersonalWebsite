@@ -11,6 +11,6 @@ export const DEFAULT_ITEMS = [
     { label: 'Socials', href: 'https://www.linkedin.com/in/rjgomezv',
       x: 43.6, y: 30.7, deg: 14.5, size: 4.2, grow: 1.20 },
   
-    { label: 'Side Projects', to: '/projects',
+    { label: 'Projects', to: '/projects',
       x: 47.6, y: 37.4, deg: 8.5, size: 4.5, grow: 1.12 },
   ];
